@@ -5,6 +5,7 @@ import Navbar from '../Navbar';
 const MasidRegister= () => {
   const [formData, setFormData] = useState({
     firstName: '',
+    adminName: '',
     email: '',
     phoneNumber: '',
     country: '',
@@ -25,12 +26,28 @@ const MasidRegister= () => {
       [name]: type === 'file' ? file : value,
     });
   };
- 
- 
- 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+
+    try {
+      const backendApiUrl = 'YOUR_BACKEND_API_URL';
+
+      const response = await fetch('http://localhost:3009/api/v1/addmasjeed', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        console.log('Form submitted successfully!');
+      } else {
+        console.error('Failed to submit form:', response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error.message);
+    }
   };
   const countries = ['USA', 'Canada', 'UK', 'Australia'];
   const states = ['New York', 'California', 'Texas', 'Florida'];
@@ -59,6 +76,19 @@ const MasidRegister= () => {
             is required
           />
       </div>
+      <div className='masid-form-field'>
+  <label className='app-para-text'>
+    Admin Name *
+  </label>
+  <input
+    type="text"
+    name="adminName"
+    value={formData.adminName}
+    onChange={handleChange}
+    className='masid-form-input'
+    required
+  />
+</div>
  
       <div className='masid-form-field'>
         <label className='app-para-text'>
